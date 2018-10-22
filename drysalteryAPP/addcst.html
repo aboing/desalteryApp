@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/addcst.css">
+</head>
+<body>
+<div id="body">
+    <!--顶部栏开始-->
+    <div id="top">
+        <i class="iconfont" onclick="javascript:history.back(-1)">&#xe69d;</i>
+        <p class="ptitle">增加客户</p>
+    </div>
+    <!--顶部栏结束-->
+    <!--内容开始-->
+    <div id="center">
+        <form action="##" method="post" id="Form" onsubmit="return false">
+            <label id="name">姓&nbsp;名：</label><input type="text" name="username" id="username" value="" placeholder="请输入姓名" /><span class="spa spa1"></span><br />
+            <label id="phone">手机号：</label><input type="text" name="userphone" id="userphone" value="" placeholder="请输入手机号" /><span class="spa spa2"></span><br />
+            <label id="address">地&nbsp;址：</label><input type="text" name="useraddress" id="useraddress" value="" placeholder="请输入地址" /><span class="spa spa3"></span><br />
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="submit" value="保存" id="sub" />
+            <div id="message">
+            </div>
+        </form>
+    </div>
+    <!--内容结束-->
+    <!--&lt;!&ndash;底部栏开始&ndash;&gt;-->
+    <!--<div id="save">-->
+        <!--保存-->
+    <!--</div>-->
+    <!--&lt;!&ndash;底部栏结束&ndash;&gt;-->
+</div>
+
+</body>
+<script src="js/jquery-1.12.2.min.js"></script>
+<script src="js/rem.js"></script>
+<script type="text/javascript">
+    window.onload=function(){
+        $("#username").focus()
+    }
+    /************************  失焦判断  **********************************/
+    $("input").blur(function(){
+        $(".spa").css("color","#BD362F")
+        if($(this).is("#username")){             //姓名判断
+            var na=/^[\u4E00-\u9FA5]{2,4}$/
+            if($("#username").val()!=""){
+                if(!(na.test($("#username").val()))){
+                    $(".spa1").text("请输入2-4个汉字");
+                    $(this).css("border","1px solid #BD362F")
+                    return false;
+                }else if(na){
+                    $(".spa1").text("");
+                    return true;                }
+            }else{
+                $(".spa1").text("");
+            }
+        }
+
+        if($(this).is("#userphone")){            //手机号判断
+            var ph=/^1[3|5|7|8|][0-9]{9}$/
+            if($("#userphone").val()!=""){
+                if(!(ph.test($("#userphone").val()))){
+                    $(".spa2").text("请输入正确手机号");
+                    $(this).css("border","1px solid #BD362F")
+                    return false;
+                }else if(ph){
+                    $(".spa2").text("");
+                    return true;
+                }
+            }else{
+                $(".spa2").text("");
+            }
+        }
+
+        if($(this).is("#useraddress")){            //地址判断
+            var ad=/^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]{8,32}/;
+            if($("#useraddress").val()!=""){
+                if(!(ad.test($("#useraddress").val()))){
+                    $(".spa3").text("请输入正确地址");
+                    $(this).css("border","1px solid #BD362F")
+                    return false;
+                }else if(ad){
+                    $(".spa3").text("");
+                    return true;
+                }
+            }else{
+                $(".spa3").text("");
+            }
+        }
+    })
+    /********************** 聚焦提示 ************************/
+    $("input").focus(function(){
+        if($(this).is("#username")){
+            $(".spa1").text("2-4个汉字").css("color","#aaa")
+            $(this).css("border","1px solid #aaa")
+        }
+        if($(this).is("#userphone")){
+            $(".spa2").text("11位手机号码").css("color","#aaa")
+            $(this).css("border","1px solid #aaa")
+        }
+        if($(this).is("#useraddress")){
+            $(".spa3").text("最少8个字符（汉字、字母和数字）").css("color","#aaa")
+            $(this).css("border","1px solid #aaa")
+        }
+    })
+    /*********************** 提交验证 ***************************/
+    $("#sub").click(function(){
+        var na=/^[\u4E00-\u9FA5]{2,4}$/;   //姓名正则
+        var ph=/^1[3|5|7|8|][0-9]{9}$/;    //手机号正则
+        var ad=/^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]{8,32}/;     //地址正则
+        if(na.test($("#username").val())&&ph.test($("#userphone").val())&&ad.test($("#useraddress").val())){
+            $.ajax({
+                type:"post",
+                url:"php/addcst.php",
+                data:$("#Form").serialize(),
+                success:function(r){
+                    console.log(r);
+                    if(r==1){
+                        $("#message").html("添加成功");
+                        $("#message").fadeTo(1000,0);
+                        window.location.href="customer.html";
+
+                    }else if(r==2){
+                        $("#message").html("添加失败");
+                        $("#message").fadeTo(3000,0);
+                        window.location.href="addcst.html";
+                    }else if(r==0){
+                        $("#message").html("不可重复添加");
+                        $("#message").fadeTo(3000,0);
+                        window.location.href="addcst.html";
+                    }
+                }
+            });
+        }else{
+            if($("#username").val()==""){
+                $(".spa1").text('请你填写用户名')
+            }
+            if($("#userphone").val()==""){
+                $(".spa2").text('请你填写手机号')
+            }
+            if($("#useraddress").val()==""){
+                $(".spa3").text('请你填写地址')
+            }
+            return false;
+        }
+    })
+</script>
+</html>

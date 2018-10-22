@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/checkCst.css">
+    <script src="js/rem.js"></script>
+</head>
+<body>
+<div id="body">
+    <div id="top">
+        <i class="iconfont" onclick="javascript:history.back(-1)">&#xe69d;</i>
+        <p class="ptitle">客户信息</p>
+        <div id="changeCst">修改</div>
+        <!--内容开始-->
+        <div id="center">
+            <form action="##" method="post" id="Form" onsubmit="return false">
+                <label id="name">姓&nbsp;名：</label><input type="text" name="username" id="username" value="" placeholder="请输入姓名" /><span class="spa spa1"></span><br />
+                <label id="phone">手机号：</label><input type="text" name="userphone" id="userphone" value="" placeholder="请输入手机号" /><span class="spa spa2"></span><br />
+                <label id="address">地&nbsp;址：</label><input type="text" name="useraddress" id="useraddress" value="" placeholder="请输入地址" /><span class="spa spa3"></span><br />
+            </form>
+        </div>
+        <!--内容结束-->
+    </div>
+</div>
+</body>
+<script src="js/jquery-1.12.2.min.js"></script>
+<script src="js/rem.js"></script>
+<script>
+        var url = window.location.search; //获取url中"?"符后的字串
+        var tid=url.slice(1);
+        $(window).load(function(){
+            $.ajax({
+                url:"php/checkCst.php",
+                type:"post",
+                data:{id:tid},
+                dataType:"json",
+                success:function(r){
+                    $("#username").val(r.Cname);
+                    $("#userphone").val(r.Ctel);
+                    $("#useraddress").val(r.Caddress);
+                }
+            });
+        });
+        $("#changeCst").click(function(){
+            window.location.href="changeCst.html?"+tid;
+        });
+</script>
+</html>

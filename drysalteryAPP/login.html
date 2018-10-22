@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title></title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/rem.js"></script>
+</head>
+<body>
+	<div id="body">
+        <div id="top">
+             <p class="ptitle">轩政后台管理系统</p>
+        </div>
+        <form  id="login" method="post"  action="##" onsubmit="return false">
+            <div class="username">
+                <p class="form-left">用户名：</p>
+                <input type="text" placeholder="请输入用户名" class="input" name="username" autocomplete="off">
+            </div>
+            <div class="password">
+                <p class="form-left">密码：</p>
+                <input type="password" placeholder="请输入密码" class="input" name="password" autocomplete="off">
+            </div>
+            <div class="submit">
+                <input type="submit" value="登录"  id="submit">
+            </div>
+            <div id="message" class="disappear">
+            </div>
+        </form>
+    </div>
+</body>
+<script src="js/jquery.js"></script>
+<script>
+    $("#login").submit(function(){
+        $.ajax({
+            type:"POST",
+            url:"php/login.php",
+            data:$("#login").serialize(),
+            success:function(r){
+                // if(r=="1"){
+                //     $("#message").html("登录成功");
+                //     window.location.href="index.html";
+                // }else if(r=="2"){
+                //     $("#message").html("密码不正确");
+                // }else if(r=="3"){
+                //     $("#message").html("用户名不存在");
+                // }
+            }
+        });
+    });
+
+</script>
+</html>

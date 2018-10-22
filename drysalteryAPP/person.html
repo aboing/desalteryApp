@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>Title</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/person.css">
+    <script src="js/rem.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.validate.js"></script>
+</head>
+<body>
+<div id="body">
+    <div id="top">
+        <i class="iconfont" onclick="javascript:history.back(-1)">&#xe69d;</i>
+        <p class="ptitle">个人设置</p>
+    </div>
+    <!--内容开始-->
+    <div id="center">
+        <form action="##" method="post" id="Form" onsubmit="return false">
+            <label id="name">管理员：</label><div id="admin">111</div><span class="spa spa2"></span><br />
+            <label id="passold">原始密码：</label><input type="text" name="passwold" id="passwold" value="" placeholder="请输入原始密码" /><span class="spa spa1"></span><br />
+            <label id="passw">新密码：</label><input type="text" name="password" id="password" value="" placeholder="请输入密码" /><span class="spa spa1"></span><br />
+            <label id="repassw">确认密码：</label><input type="text" name="repassword" id="repassword" value="" placeholder="请重新输入密码" /><span class="spa spa3"></span><br />
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="submit" value="保存" id="sub" />
+            <div id="message">
+            </div>
+        </form>
+    </div>
+    <!--内容结束-->
+</div>
+</body>
+</html>

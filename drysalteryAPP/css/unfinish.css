@@ -1,0 +1,50 @@
+/*中间部分开始*/
+.unfinishBox {
+    width: 100%;
+    height: auto;
+    border: .01rem solid #333;
+}
+
+.unfinishBox p {
+    font-size: .2rem;
+    margin-left: .2rem;
+}
+
+.goods {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.good {
+    width: 100%;
+    height: .9rem;
+    background-color: red;
+    margin-top:.2rem;
+}
+
+.goodname {
+    font-size: .18rem;
+    float: left;
+    margin-left:.2rem;
+}
+.multiplication{
+    font-size: .2rem;
+    float:left;
+}
+.goodnum {
+    font-size: .18rem;
+    color: #000;
+    float: left;
+}
+.checkSee{
+    width:.6rem;
+    height:.3rem;
+    background-color: #3fffda;
+    border-radius: .05rem;
+    float:right;
+    position: absolute;
+    right:.1rem;
+    bottom:.1rem;
+}
+/*中间部分结束*/

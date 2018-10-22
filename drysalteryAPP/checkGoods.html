@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/checkGoods.css">
+    <script src="js/rem.js"></script>
+</head>
+<style>
+    #empty{
+        width:100%;
+        height:1.5rem;
+        float:left;
+        position: relative;
+    }
+    #showarea{
+        width: .5rem;
+        height: .5rem;
+        border: .01rem solid #333;
+        position: absolute;
+        right: .52rem;
+        bottom: .37rem;
+    }
+</style>
+<body>
+<div id="body">
+    <div id="top">
+        <i class="iconfont" onclick="javascript:history.back(-1)">&#xe69d;</i>
+        <p class="ptitle">增加商品</p>
+    </div>
+    <!--内容开始-->
+    <div id="center">
+        <form action="##" method="post" id="Form" onsubmit="return false">
+            <label id="name">商品名称：</label><input type="text" name="goodname" id="goodname" value="" placeholder="请输入商品名称" /><span class="spa spa1"></span><br />
+            <label id="spec">规格：</label><input type="text" name="goodspec" id="goodspec" value="" placeholder="请输入规格" /><span class="spa spa2"></span><br />
+            <label id="unit">单位：</label><input type="text" name="goodunit" id="goodunit" value="" placeholder="请输入单位" /><span class="spa spa3"></span><br />
+            <div id="empty">
+                <label id="pic">图片：</label>
+                <input type="file" name="myfile">
+                <input type="button" id="sub1" value="上传">
+                <div id="showarea"></div>
+                <progress min="0" max="100" value="0" ></progress>
+                <input type="hidden" id="hidden" name="image"><span class="spa spa4"></span><br />
+            </div>
+            <label id="desc">描述：</label><input type="text" name="gooddesc" id="gooddesc" value="" placeholder="请输入描述" /><span class="spa spa5"></span><br />
+            <label id="price">价格：</label><input type="text" name="goodprice" id="goodprice" value="" placeholder="请输入价格" /><span class="spa spa6"></span><br />
+            <label><div id="message">
+            </div></label><input type="submit" value="保存" id="sub" />
+        </form>
+    </div>
+    <!--内容结束-->
+    <!--&lt;!&ndash;底部栏开始&ndash;&gt;-->
+    <!--<div id="save">-->
+    <!--保存-->
+    <!--</div>-->
+    <!--&lt;!&ndash;底部栏结束&ndash;&gt;-->
+</div>
+</body>
+<script src="js/jquery.js"></script>
+<script>
+    var url = window.location.search; //获取url中"?"符后的字串
+    var tid=url.slice(1);
+    $(window).load(function(){
+        $.ajax({
+            url:"php/checkGoods.php",
+            type:"post",
+            data:{id:tid},
+            dataType:"json",
+            success:function(r){
+                console.log(r);
+                $("#goodname").val(r.goodname);
+                $("#goodspec").val(r.goodspec);
+                $("#goodunit").val(r.goodunit);
+                var img=document.createElement("img");
+                img.style.width=".5rem";
+                img.style.height=".5rem";
+                img.src=r.image;
+                showObj.appendChild(img);
+                $("#gooddesc").val(r.gooddesc);
+                $("#goodprice").val(r.goodprice);
+            }
+        });
+    });
+    $("#changeCst").click(function(){
+        window.location.href="changeCst.html?"+tid;
+    });
+
+    var fileObj=document.querySelector("[type=file]");
+    var showObj=document.querySelector("#showarea");
+    var subObj=document.querySelector("#sub1");
+    var proobj=document.querySelector("progress");
+    var hiddenObj=document.querySelector("#hidden");
+    var maxSize=1024*1024*3;
+    var typeReg=/image\/(png|jpe?g|gif)$/;
+    fileObj.onchange=function(){
+        var file=fileObj.files[0];
+        if(file.size>maxSize){
+            alert("文件过大");
+            fileObj.value="";
+            return;
+        }
+        if(!typeReg.test(file.type)){
+            alert("文件格式错误");
+            fileObj.value="";
+            return;
+        }
+        var fr=new FileReader();
+        fr.readAsDataURL(file);
+        fr.onload=function(){
+            var img = document.createElement("img");
+            img.src = fr.result;
+            img.width = 50;
+            img.height = 50;
+            img.innerHTML = "";
+            showObj.innerHTML="";
+            showObj.appendChild(img);
+        }
+    };
+    subObj.onclick=function(){
+        var file=fileObj.files[0];
+        var fd=new FormData();
+        fd.append("f",file);
+        var xhr=new XMLHttpRequest();
+        xhr.open("post","php/upload.php");
+        xhr.upload.onprogress=function(e){
+            var bili=e.loaded/e.total;
+            proobj.value=bili*100;
+        }
+        xhr.send(fd);
+        xhr.onload=function(){
+            var r=xhr.response;
+            hiddenObj.value=r;
+        }
+        fileObj.value="";
+    }
+
+    $("#sub").click(function(){
+        var na = /^[\u4E00-\u9FA5]{2,6}$/;
+        var gg=/^[0-9]*$/;
+        var dw=/^[\u4E00-\u9FA5]/;
+        var ms=/^[\u4E00-\u9FA5]/;
+        var jg=/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){0,4})?$/;
+        if (na.test($("#goodname").val()) && gg.test($("#goodspec").val()) && dw.test($("#goodunit").val()) && ms.test($("#gooddesc").val()) && jg.test($("#goodprice").val())) {
+            $.ajax({
+                url: "php/changeGoods.php?"+tid,
+                type: "POST",
+                dataType: "json",
+                data: $("#Form").serialize(),
+                success: function (r) {
+                    if (r == 1) {
+                        $("#message").html("修改成功");
+                        $("#message").fadeTo(1000, 0);
+                        window.location.href = "goods.html";
+                    } else if (r == 0) {
+                        $("#message").html("修改失败");
+                        $("#message").fadeTo(1000, 0);
+                        window.location.href = "checkGoods.html";
+                    }
+                }
+            });
+        } else {
+            if ($("#goodname").val() == "") {
+                $(".spa1").text('请你填写商品名称')
+            }
+            if ($("#gooddpec").val() == "") {
+                $(".spa2").text('请你填写商品规格')
+            }
+            if ($("#goodunit").val() == "") {
+                $(".spa3").text('请你填写商品单位')
+            }
+            if ($("#gooddesc").val() == "") {
+                $(".spa5").text('请你填写商品描述')
+            }
+            if ($("#goodprice").val() == "") {
+                $(".spa6").text('请你填写商品价格')
+            }
+            return false;
+        }
+    })
+
+    // 保存结束
+</script>
+</html>

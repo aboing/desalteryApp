@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/goods.css">
+    <script src="js/rem.js"></script>
+</head>
+<body>
+<div id="body">
+    <div id="top">
+        <i class="iconfont" onclick="javascript:history.back(-1)">&#xe69d;</i>
+        <p class="ptitle">商品管理</p>
+    </div>
+    <div id="center">
+        <div id="list">
+            <p>商品列表</p>
+            <div id="name">
+            </div>
+        </div>
+    </div>
+    <div id="add" onclick="javascript:location.href='addgoods.html'">
+        <i class="iconfont">&#xe60d;</i>
+        <p>增加商品</p>
+    </div>
+</div>
+</body>
+<script src="js/jquery.js"></script>
+<script>
+    $(window).load(function () {
+        var str = "";
+        $.ajax({
+            url: "php/goods.php",
+            type: "method",
+            dataType: "json",
+            success: function (r) {
+                var arr = r;
+                $.each(arr, function (index, val) {
+                    str += "<a id=" + val.id + " class='goods'>" + val.goodname + "</a>";
+                });
+                $("#name").html(str);
+            }
+        });
+        //点击商品跳转页面
+        $("#list").click(function (e) {
+            var target = e.target;
+            var tid = target.id;
+            window.location.href = "checkGoods.html?" + tid;
+        });
+    });
+</script>
+</html>
